@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Base - KASUGA's Guides</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7f7f7;
+            --bg-code: #2d2d2d;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --text-code: #e6e6e6;
+            --accent: #4a90d9;
+            --accent-hover: #357abd;
+            --border: #e0e0e0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --link: #0066cc;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-code: #1e1e1e;
+            --text-primary: #e6e6e6;
+            --text-secondary: #a0a0a0;
+            --text-code: #d4d4d4;
+            --border: #404040;
+            --shadow: rgba(255, 255, 255, 0.05);
+            --link: #4dabf7;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            line-height: 1.8;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--accent) 0%, #6c5ce7 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 0 0 20px 20px;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        header .subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 15px 5px 0;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.2em;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            background: var(--bg-secondary);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px var(--shadow);
+            z-index: 100;
+        }
+
+        nav h3 {
+            margin-bottom: 15px;
+            color: var(--accent);
+            font-size: 1.2em;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        section {
+            margin-bottom: 60px;
+            scroll-margin-top: 100px;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            color: var(--accent);
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            margin: 30px 0 20px;
+            color: var(--text-primary);
+        }
+
+        h4 {
+            font-size: 1.3em;
+            margin: 25px 0 15px;
+            color: var(--text-secondary);
+        }
+
+        p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .highlight {
+            background: var(--accent);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        pre {
+            background: var(--bg-code);
+            color: var(--text-code);
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px var(--shadow);
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        code {
+            background: var(--bg-code);
+            color: var(--text-code);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        ul, ol {
+            margin: 20px 0 20px 30px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        a {
+            color: var(--link);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            color: #856404;
+        }
+
+        [data-theme="dark"] .warning {
+            background: #3d3419;
+            color: #ffc107;
+        }
+
+        .info {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            color: #0c5460;
+        }
+
+        [data-theme="dark"] .info {
+            background: #1a3238;
+            color: #17a2b8;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            color: #155724;
+        }
+
+        [data-theme="dark"] .success {
+            background: #1a2f1e;
+            color: #28a745;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: var(--bg-primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-top: 2px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .emoji {
+            font-size: 1.3em;
+            margin-right: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 4px;
+        }
+
+        .last-updated {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--shadow);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            font-size: 1.5em;
+            border: none;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
+
+    <header>
+        <h1>Knowledge Base</h1>
+        <p class="subtitle">Guides &amp; Documentation by KASUGA</p>
+        <div>
+            <span class="badge">&#128218; Guides</span>
+            <span class="badge">&#128736;&#65039; How-To</span>
+            <span class="badge">&#128161; Tips</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav>
+            <h3>&#128209; Contents</h3>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#ai-tools">AI Tools Setup</a></li>
+                <li><a href="#dev-environment">Dev Environment</a></li>
+                <li><a href="#workflows">Workflows</a></li>
+                <li><a href="#references">References</a></li>
+            </ul>
+        </nav>
+
+        <!-- ===== About ===== -->
+        <section id="about">
+            <h2><span class="emoji">&#128214;</span>About</h2>
+            <div class="card">
+                <p>This Knowledge Base is a collection of guides, how-tos, and documentation curated by KASUGA. Topics cover AI tool configurations, development workflows, automation setups, and more.</p>
+                <p>Feel free to browse and reference any of the guides below.</p>
+            </div>
+
+            <div class="info">
+                <strong>&#128161; Note:</strong> This site is regularly updated as new guides are added. Check back for new content.
+            </div>
+        </section>
+
+        <!-- ===== AI Tools Setup ===== -->
+        <section id="ai-tools">
+            <h2><span class="emoji">&#129302;</span>AI Tools Setup</h2>
+            <p>Configuration guides for AI-powered development tools and MCP servers.</p>
+
+            <h3>Claude Code - Multi-AI Architecture</h3>
+            <div class="card">
+                <p>Claude Code (Opus/Sonnet) acts as the orchestrator, delegating tasks to specialized AI models via MCP servers.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Tool</th>
+                            <th>Model</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Code generation / File operations</td>
+                            <td>Codex CLI (MCP)</td>
+                            <td>GPT-5.3-codex</td>
+                        </tr>
+                        <tr>
+                            <td>Research / Summarization</td>
+                            <td>Gemini Quick</td>
+                            <td>Gemini 2.5 Flash</td>
+                        </tr>
+                        <tr>
+                            <td>Design review / Double-check</td>
+                            <td>Gemini Review</td>
+                            <td>Gemini 2.5 Pro</td>
+                        </tr>
+                        <tr>
+                            <td>Light tasks / Translation</td>
+                            <td>GPT Quick</td>
+                            <td>GPT-4o-mini</td>
+                        </tr>
+                        <tr>
+                            <td>Second opinion / Code review</td>
+                            <td>GPT Review</td>
+                            <td>GPT-4o</td>
+                        </tr>
+                        <tr>
+                            <td>Multi-AI discussion</td>
+                            <td>AI Discussion</td>
+                            <td>GPT + Gemini</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>MCP Servers</h3>
+            <div class="grid">
+                <div class="card">
+                    <h4>&#127757; Playwright</h4>
+                    <p>Browser automation and web testing</p>
+                </div>
+                <div class="card">
+                    <h4>&#129504; Memory</h4>
+                    <p>Persistent knowledge graph across sessions</p>
+                </div>
+                <div class="card">
+                    <h4>&#128221; Obsidian</h4>
+                    <p>Note management and vault access</p>
+                </div>
+                <div class="card">
+                    <h4>&#128269; Brave Search</h4>
+                    <p>Web search integration</p>
+                </div>
+                <div class="card">
+                    <h4>&#128025; GitHub</h4>
+                    <p>Repository, issue, and PR management</p>
+                </div>
+                <div class="card">
+                    <h4>&#128187; Codex CLI</h4>
+                    <p>OpenAI Codex for code generation</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Dev Environment ===== -->
+        <section id="dev-environment">
+            <h2><span class="emoji">&#128736;&#65039;</span>Dev Environment</h2>
+            <p>Development environment setup guides and configurations.</p>
+
+            <div class="card">
+                <h4>Coming Soon</h4>
+                <p>Guides for development environment setup will be added here.</p>
+                <ul>
+                    <li>Windows 11 development setup</li>
+                    <li>Git &amp; GitHub configuration</li>
+                    <li>Node.js / Python environment</li>
+                    <li>VS Code extensions and settings</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ===== Workflows ===== -->
+        <section id="workflows">
+            <h2><span class="emoji">&#9889;</span>Workflows</h2>
+            <p>Automation workflows and productivity tips.</p>
+
+            <div class="card">
+                <h4>Coming Soon</h4>
+                <p>Workflow documentation will be added here.</p>
+                <ul>
+                    <li>Claude Code work log automation</li>
+                    <li>GitHub Actions CI/CD pipelines</li>
+                    <li>GCP automation scripts</li>
+                    <li>Obsidian + Claude integration</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ===== References ===== -->
+        <section id="references">
+            <h2><span class="emoji">&#128218;</span>References</h2>
+            <div class="grid">
+                <div class="card">
+                    <h4>&#128279; Tools &amp; Services</h4>
+                    <ul>
+                        <li><a href="https://claude.ai" target="_blank">Claude AI</a></li>
+                        <li><a href="https://github.com/anthropics/claude-code" target="_blank">Claude Code</a></li>
+                        <li><a href="https://obsidian.md" target="_blank">Obsidian</a></li>
+                        <li><a href="https://github.com/skasuga-ctrl" target="_blank">GitHub (@skasuga-ctrl)</a></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>&#128196; Related Repos</h4>
+                    <ul>
+                        <li><a href="https://github.com/skasuga-ctrl/work-logs" target="_blank">Work Logs</a></li>
+                        <li><a href="https://github.com/skasuga-ctrl/guides" target="_blank">This Knowledge Base (source)</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Knowledge Base by <a href="https://github.com/skasuga-ctrl" target="_blank">KASUGA</a></p>
+        <p class="last-updated">Last updated: March 2026</p>
+    </footer>
+
+    <button class="back-to-top" onclick="scrollToTop()">&#8593;</button>
+
+    <script>
+        // Theme toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Back to top button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
