@@ -20,9 +20,11 @@
             --text-code: #e6e6e6;
             --accent: #4a90d9;
             --accent-hover: #357abd;
+            --accent-secondary: #6c5ce7;
             --border: #e0e0e0;
             --shadow: rgba(0, 0, 0, 0.1);
             --link: #0066cc;
+            --search-bg: #ffffff;
         }
 
         [data-theme="dark"] {
@@ -35,6 +37,7 @@
             --border: #404040;
             --shadow: rgba(255, 255, 255, 0.05);
             --link: #4dabf7;
+            --search-bg: #2d2d2d;
         }
 
         body {
@@ -51,8 +54,9 @@
             padding: 20px;
         }
 
+        /* ===== Header ===== */
         header {
-            background: linear-gradient(135deg, var(--accent) 0%, #6c5ce7 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
             color: white;
             padding: 60px 20px;
             text-align: center;
@@ -72,7 +76,7 @@
             font-weight: 300;
         }
 
-        .badge {
+        .header-badge {
             display: inline-block;
             background: rgba(255, 255, 255, 0.2);
             padding: 8px 16px;
@@ -82,6 +86,7 @@
             font-weight: 500;
         }
 
+        /* ===== Theme Toggle ===== */
         .theme-toggle {
             position: fixed;
             top: 20px;
@@ -101,6 +106,46 @@
             box-shadow: 0 4px 12px var(--shadow);
         }
 
+        /* ===== Search Bar ===== */
+        .search-container {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1em;
+            background: var(--search-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .search-container input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.2);
+        }
+
+        .search-container::before {
+            content: "\1F50D";
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+        }
+
+        .search-no-results {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            display: none;
+        }
+
+        /* ===== Navigation ===== */
         nav {
             position: sticky;
             top: 0;
@@ -122,7 +167,7 @@
             list-style: none;
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
         }
 
         nav a {
@@ -133,17 +178,23 @@
             transition: all 0.3s ease;
             display: block;
             font-weight: 500;
+            font-size: 0.95em;
         }
 
-        nav a:hover {
+        nav a:hover, nav a.active {
             background: var(--accent);
             color: white;
             transform: translateY(-2px);
         }
 
+        /* ===== Sections ===== */
         section {
             margin-bottom: 60px;
             scroll-margin-top: 100px;
+        }
+
+        section.hidden {
+            display: none;
         }
 
         h2 {
@@ -171,6 +222,7 @@
             line-height: 1.8;
         }
 
+        /* ===== Cards ===== */
         .card {
             background: var(--bg-secondary);
             padding: 30px;
@@ -185,13 +237,91 @@
             box-shadow: 0 6px 20px var(--shadow);
         }
 
+        .card-icon {
+            font-size: 2em;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
             margin: 30px 0;
         }
 
+        /* ===== Status Badges ===== */
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .status-complete {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-wip {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .status-planned {
+            background: #6c757d;
+            color: white;
+        }
+
+        /* ===== Tag Badges ===== */
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: inherit;
+        }
+
+        .tag-ai { background: #e3f2fd; color: #1565c0; }
+        .tag-dev { background: #e8f5e9; color: #2e7d32; }
+        .tag-ebay { background: #fff3e0; color: #e65100; }
+        .tag-auto { background: #f3e5f5; color: #7b1fa2; }
+        .tag-all { background: var(--accent); color: white; }
+
+        [data-theme="dark"] .tag-ai { background: #1a2940; color: #64b5f6; }
+        [data-theme="dark"] .tag-dev { background: #1a2f1e; color: #66bb6a; }
+        [data-theme="dark"] .tag-ebay { background: #2f2013; color: #ffb74d; }
+        [data-theme="dark"] .tag-auto { background: #2a1a30; color: #ce93d8; }
+
+        .tag:hover { opacity: 0.8; transform: scale(1.05); }
+        .tag.active { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+        .tag-filter-container {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .tag-filter-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-right: 8px;
+        }
+
+        /* ===== Highlight ===== */
         .highlight {
             background: var(--accent);
             color: white;
@@ -200,6 +330,18 @@
             font-weight: 600;
         }
 
+        /* ===== Command Block ===== */
+        .command {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 1.05em;
+        }
+
+        /* ===== Code ===== */
         pre {
             background: var(--bg-code);
             color: var(--text-code);
@@ -211,6 +353,25 @@
             font-family: 'Monaco', 'Courier New', monospace;
             font-size: 0.95em;
             line-height: 1.6;
+            position: relative;
+        }
+
+        pre .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: var(--text-code);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s ease;
+        }
+
+        pre .copy-btn:hover {
+            background: rgba(255,255,255,0.3);
         }
 
         code {
@@ -227,6 +388,7 @@
             padding: 0;
         }
 
+        /* ===== Lists ===== */
         ul, ol {
             margin: 20px 0 20px 30px;
         }
@@ -236,6 +398,7 @@
             line-height: 1.7;
         }
 
+        /* ===== Links ===== */
         a {
             color: var(--link);
             text-decoration: none;
@@ -246,6 +409,7 @@
             text-decoration: underline;
         }
 
+        /* ===== Alert Boxes ===== */
         .warning {
             background: #fff3cd;
             border-left: 5px solid #ffc107;
@@ -288,6 +452,21 @@
             color: #28a745;
         }
 
+        .danger {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            color: #721c24;
+        }
+
+        [data-theme="dark"] .danger {
+            background: #2f1a1e;
+            color: #dc3545;
+        }
+
+        /* ===== Tables ===== */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -314,6 +493,59 @@
             background: var(--bg-primary);
         }
 
+        /* ===== Architecture Diagram ===== */
+        .arch-diagram {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .arch-center {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            color: white;
+            padding: 20px 40px;
+            border-radius: 16px;
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(74, 144, 217, 0.3);
+        }
+
+        .arch-arrow {
+            color: var(--accent);
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+
+        .arch-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .arch-node {
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .arch-node:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        /* ===== Footer ===== */
         footer {
             text-align: center;
             padding: 40px 20px;
@@ -322,45 +554,13 @@
             color: var(--text-secondary);
         }
 
-        .emoji {
-            font-size: 1.3em;
-            margin-right: 8px;
-        }
-
-        .tag {
-            display: inline-block;
-            background: var(--accent);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            margin: 4px;
-        }
-
         .last-updated {
             font-size: 0.85em;
             color: var(--text-secondary);
             margin-top: 10px;
         }
 
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2em;
-            }
-
-            nav ul {
-                flex-direction: column;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            h2 {
-                font-size: 1.8em;
-            }
-        }
-
+        /* ===== Back to Top ===== */
         .back-to-top {
             position: fixed;
             bottom: 30px;
@@ -391,6 +591,30 @@
             transform: translateY(-5px);
             box-shadow: 0 6px 20px var(--shadow);
         }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            .arch-row {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -400,170 +624,430 @@
         <h1>Knowledge Base</h1>
         <p class="subtitle">Guides &amp; Documentation by KASUGA</p>
         <div>
-            <span class="badge">&#128218; Guides</span>
-            <span class="badge">&#128736;&#65039; How-To</span>
-            <span class="badge">&#128161; Tips</span>
+            <span class="header-badge">&#129302; Multi-AI Orchestration</span>
+            <span class="header-badge">&#128736;&#65039; Automation</span>
+            <span class="header-badge">&#128176; eBay Operations</span>
         </div>
     </header>
 
     <div class="container">
-        <nav>
+        <!-- ===== Search ===== -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search guides... (e.g. MCP, VBA, Claude)" oninput="handleSearch()">
+        </div>
+
+        <!-- ===== Tag Filter ===== -->
+        <div class="tag-filter-container">
+            <span class="tag-filter-label">Filter:</span>
+            <button class="tag tag-all active" onclick="filterByTag('all')">All</button>
+            <button class="tag tag-ai" onclick="filterByTag('ai')">AI Tools</button>
+            <button class="tag tag-dev" onclick="filterByTag('dev')">Dev</button>
+            <button class="tag tag-ebay" onclick="filterByTag('ebay')">eBay</button>
+            <button class="tag tag-auto" onclick="filterByTag('auto')">Automation</button>
+        </div>
+
+        <!-- ===== Navigation ===== -->
+        <nav id="mainNav">
             <h3>&#128209; Contents</h3>
             <ul>
                 <li><a href="#about">About</a></li>
-                <li><a href="#ai-tools">AI Tools Setup</a></li>
+                <li><a href="#ai-architecture">AI Architecture</a></li>
                 <li><a href="#dev-environment">Dev Environment</a></li>
-                <li><a href="#workflows">Workflows</a></li>
+                <li><a href="#ebay-operations">eBay Operations</a></li>
+                <li><a href="#workflows">Workflows &amp; Automation</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
                 <li><a href="#references">References</a></li>
             </ul>
         </nav>
 
-        <!-- ===== About ===== -->
-        <section id="about">
+        <div class="search-no-results" id="noResults">
+            &#128533; No matching content found.
+        </div>
+
+        <!-- ===== 1. About ===== -->
+        <section id="about" data-tags="all">
             <h2><span class="emoji">&#128214;</span>About</h2>
             <div class="card">
-                <p>This Knowledge Base is a collection of guides, how-tos, and documentation curated by KASUGA. Topics cover AI tool configurations, development workflows, automation setups, and more.</p>
-                <p>Feel free to browse and reference any of the guides below.</p>
+                <p><strong>Knowledge Base</strong> is a collection of guides, how-tos, and documentation curated by KASUGA. This site covers:</p>
+                <ul>
+                    <li><strong>Multi-AI Architecture</strong> &mdash; Claude Code as orchestrator with Codex CLI, Gemini, GPT as sub-agents</li>
+                    <li><strong>Development Environment</strong> &mdash; Windows 11 setup, tools, and configurations</li>
+                    <li><strong>eBay Operations</strong> &mdash; Sales management with Excel VBA automation</li>
+                    <li><strong>Workflow Automation</strong> &mdash; GitHub Actions, GCP, work log systems</li>
+                </ul>
             </div>
 
-            <div class="info">
-                <strong>&#128161; Note:</strong> This site is regularly updated as new guides are added. Check back for new content.
+            <div class="success">
+                <h4>&#127919; Site Features</h4>
+                <ul>
+                    <li><strong>Dark mode</strong> &mdash; Toggle with the &#127763; button (top-right)</li>
+                    <li><strong>Search</strong> &mdash; Filter content by keyword</li>
+                    <li><strong>Tag filters</strong> &mdash; Narrow down by category</li>
+                    <li><strong>Sticky nav</strong> &mdash; Jump to any section quickly</li>
+                </ul>
             </div>
         </section>
 
-        <!-- ===== AI Tools Setup ===== -->
-        <section id="ai-tools">
-            <h2><span class="emoji">&#129302;</span>AI Tools Setup</h2>
-            <p>Configuration guides for AI-powered development tools and MCP servers.</p>
+        <!-- ===== 2. AI Architecture ===== -->
+        <section id="ai-architecture" data-tags="ai">
+            <h2><span class="emoji">&#129302;</span>AI Architecture <span class="status-badge status-complete">Complete</span></h2>
+            <p>Claude Code (Opus/Sonnet) acts as the orchestrator, delegating tasks to specialized AI models via MCP servers.</p>
 
-            <h3>Claude Code - Multi-AI Architecture</h3>
-            <div class="card">
-                <p>Claude Code (Opus/Sonnet) acts as the orchestrator, delegating tasks to specialized AI models via MCP servers.</p>
+            <!-- Architecture Diagram -->
+            <div class="arch-diagram">
+                <div class="arch-center">&#129302; Claude Code (Opus 4.6)<br><small>Commander &amp; Main Worker</small></div>
+                <div class="arch-arrow">&#9660; delegates to &#9660;</div>
+                <div class="arch-row">
+                    <div class="arch-node">&#128187; Codex CLI<br><small>Code Generation</small></div>
+                    <div class="arch-node">&#9889; Gemini Flash<br><small>Research</small></div>
+                    <div class="arch-node">&#129504; Gemini Pro<br><small>Review</small></div>
+                    <div class="arch-node">&#128172; GPT-4o-mini<br><small>Light Tasks</small></div>
+                    <div class="arch-node">&#128300; GPT-4o<br><small>Second Opinion</small></div>
+                </div>
+            </div>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Task</th>
-                            <th>Tool</th>
-                            <th>Model</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Code generation / File operations</td>
-                            <td>Codex CLI (MCP)</td>
-                            <td>GPT-5.3-codex</td>
-                        </tr>
-                        <tr>
-                            <td>Research / Summarization</td>
-                            <td>Gemini Quick</td>
-                            <td>Gemini 2.5 Flash</td>
-                        </tr>
-                        <tr>
-                            <td>Design review / Double-check</td>
-                            <td>Gemini Review</td>
-                            <td>Gemini 2.5 Pro</td>
-                        </tr>
-                        <tr>
-                            <td>Light tasks / Translation</td>
-                            <td>GPT Quick</td>
-                            <td>GPT-4o-mini</td>
-                        </tr>
-                        <tr>
-                            <td>Second opinion / Code review</td>
-                            <td>GPT Review</td>
-                            <td>GPT-4o</td>
-                        </tr>
-                        <tr>
-                            <td>Multi-AI discussion</td>
-                            <td>AI Discussion</td>
-                            <td>GPT + Gemini</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <h3>AI Model Roles</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Tool</th>
+                        <th>Model</th>
+                        <th>Priority</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Code generation / File ops</td>
+                        <td><code>codex-cli</code></td>
+                        <td>GPT-5.3-codex</td>
+                        <td><span class="highlight">Primary</span></td>
+                    </tr>
+                    <tr>
+                        <td>Research / Summarization</td>
+                        <td><code>gemini_quick</code></td>
+                        <td>Gemini 2.5 Flash</td>
+                        <td><span class="highlight">Primary</span></td>
+                    </tr>
+                    <tr>
+                        <td>Design review / Double-check</td>
+                        <td><code>gemini_review</code></td>
+                        <td>Gemini 2.5 Pro</td>
+                        <td>Secondary</td>
+                    </tr>
+                    <tr>
+                        <td>Light tasks / Translation</td>
+                        <td><code>gpt_quick</code></td>
+                        <td>GPT-4o-mini</td>
+                        <td>Fallback</td>
+                    </tr>
+                    <tr>
+                        <td>Second opinion / Code review</td>
+                        <td><code>gpt_review</code></td>
+                        <td>GPT-4o</td>
+                        <td>Fallback</td>
+                    </tr>
+                    <tr>
+                        <td>Multi-AI discussion</td>
+                        <td><code>ai_gather</code> / <code>ai_debate</code></td>
+                        <td>GPT + Gemini</td>
+                        <td>On demand</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info">
+                <strong>&#128161; Cost Optimization Rule:</strong> Documents over 1,000 lines are first summarized by <code>gemini_quick</code>. Claude's tokens are reserved for design decisions, code execution, and judgment calls.
             </div>
 
             <h3>MCP Servers</h3>
             <div class="grid">
                 <div class="card">
-                    <h4>&#127757; Playwright</h4>
-                    <p>Browser automation and web testing</p>
+                    <span class="card-icon">&#127757;</span>
+                    <h4>Playwright</h4>
+                    <p>Browser automation, web testing, screenshots, and form interactions</p>
                 </div>
                 <div class="card">
-                    <h4>&#129504; Memory</h4>
-                    <p>Persistent knowledge graph across sessions</p>
+                    <span class="card-icon">&#129504;</span>
+                    <h4>Memory</h4>
+                    <p>Persistent knowledge graph that retains context across sessions</p>
                 </div>
                 <div class="card">
-                    <h4>&#128221; Obsidian</h4>
-                    <p>Note management and vault access</p>
+                    <span class="card-icon">&#128221;</span>
+                    <h4>Obsidian</h4>
+                    <p>Direct vault access for reading, writing, and searching notes</p>
                 </div>
                 <div class="card">
-                    <h4>&#128269; Brave Search</h4>
-                    <p>Web search integration</p>
+                    <span class="card-icon">&#128269;</span>
+                    <h4>Brave Search</h4>
+                    <p>Web and local search integration for real-time information</p>
                 </div>
                 <div class="card">
-                    <h4>&#128025; GitHub</h4>
-                    <p>Repository, issue, and PR management</p>
+                    <span class="card-icon">&#128025;</span>
+                    <h4>GitHub</h4>
+                    <p>Repository, issue, PR management and code search</p>
                 </div>
                 <div class="card">
-                    <h4>&#128187; Codex CLI</h4>
-                    <p>OpenAI Codex for code generation</p>
+                    <span class="card-icon">&#128187;</span>
+                    <h4>Codex CLI</h4>
+                    <p>OpenAI Codex for code generation with full file system access</p>
                 </div>
+                <div class="card">
+                    <span class="card-icon">&#9889;</span>
+                    <h4>Gemini Backup</h4>
+                    <p>Quick (Flash) and Review (Pro) endpoints for research tasks</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">&#128172;</span>
+                    <h4>OpenAI Backup</h4>
+                    <p>GPT-4o-mini and GPT-4o for fallback and second opinions</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">&#128483;&#65039;</span>
+                    <h4>AI Discussion</h4>
+                    <p>Multi-AI debate, gather, and code review across models</p>
+                </div>
+            </div>
+
+            <div class="warning">
+                <h4>&#9888;&#65039; Context Window Management</h4>
+                <p>Don't enable all MCPs at once. Too many active tools can shrink the 200k context window to ~70k. Keep active tools under 80.</p>
+                <div class="command">claude mcp list &nbsp;&nbsp;# Check active MCPs</div>
             </div>
         </section>
 
-        <!-- ===== Dev Environment ===== -->
-        <section id="dev-environment">
-            <h2><span class="emoji">&#128736;&#65039;</span>Dev Environment</h2>
-            <p>Development environment setup guides and configurations.</p>
+        <!-- ===== 3. Dev Environment ===== -->
+        <section id="dev-environment" data-tags="dev">
+            <h2><span class="emoji">&#128736;&#65039;</span>Dev Environment <span class="status-badge status-wip">WIP</span></h2>
+            <p>Development environment setup on Windows 11.</p>
 
+            <h3>Current Stack</h3>
+            <div class="grid">
+                <div class="card">
+                    <span class="card-icon">&#128187;</span>
+                    <h4>OS</h4>
+                    <p>Windows 11 Pro (Build 26200)</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">&#9000;&#65039;</span>
+                    <h4>Shell</h4>
+                    <p>Git Bash (Unix syntax on Windows)</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">&#128230;</span>
+                    <h4>Version Control</h4>
+                    <p>Git + GitHub CLI (<code>gh</code>)</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">&#128221;</span>
+                    <h4>Notes</h4>
+                    <p>Obsidian (Vault at <code>Documents/Vault_Strage</code>)</p>
+                </div>
+            </div>
+
+            <h3>Planned Guides</h3>
             <div class="card">
-                <h4>Coming Soon</h4>
-                <p>Guides for development environment setup will be added here.</p>
                 <ul>
-                    <li>Windows 11 development setup</li>
-                    <li>Git &amp; GitHub configuration</li>
-                    <li>Node.js / Python environment</li>
+                    <li>Git &amp; GitHub configuration best practices</li>
+                    <li>Node.js / Python environment setup</li>
                     <li>VS Code extensions and settings</li>
+                    <li>Claude Code installation and CLAUDE.md setup</li>
+                    <li>MCP server registration walkthrough</li>
                 </ul>
             </div>
         </section>
 
-        <!-- ===== Workflows ===== -->
-        <section id="workflows">
-            <h2><span class="emoji">&#9889;</span>Workflows</h2>
-            <p>Automation workflows and productivity tips.</p>
+        <!-- ===== 4. eBay Operations ===== -->
+        <section id="ebay-operations" data-tags="ebay">
+            <h2><span class="emoji">&#128176;</span>eBay Operations <span class="status-badge status-wip">WIP</span></h2>
+            <p>Sales management system built with Excel VBA.</p>
+
+            <h3>Sales Management Workbook</h3>
+            <div class="card">
+                <p><strong>File:</strong> <code>Documents/KSA/11_ebay/&#22770;&#36023;&#31649;&#29702;&#21488;&#24115;2026.xlsm</code></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Count</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Worksheets</td>
+                            <td>19</td>
+                            <td>Sales tracking, inventory, accounting</td>
+                        </tr>
+                        <tr>
+                            <td>VBA Modules</td>
+                            <td>21</td>
+                            <td>Automation, data processing, export</td>
+                        </tr>
+                        <tr>
+                            <td>UserForms</td>
+                            <td>5</td>
+                            <td>Data entry, search, settings</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Key VBA Modules</h3>
+            <div class="grid">
+                <div class="card">
+                    <span class="card-icon">&#128230;</span>
+                    <h4>modExportClean</h4>
+                    <p>Data export and cleanup automation</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">&#128178;</span>
+                    <h4>modTransFeeMatch</h4>
+                    <p>Transaction fee matching and reconciliation</p>
+                </div>
+            </div>
+
+            <div class="info">
+                <strong>&#128161; Tip:</strong> Detailed VBA module documentation is maintained in Obsidian. See the <code>ebay-vba.md</code> memory file for the full breakdown.
+            </div>
+        </section>
+
+        <!-- ===== 5. Workflows & Automation ===== -->
+        <section id="workflows" data-tags="auto">
+            <h2><span class="emoji">&#9889;</span>Workflows &amp; Automation <span class="status-badge status-wip">WIP</span></h2>
+            <p>Automation workflows and productivity systems.</p>
+
+            <h3>Work Log System</h3>
+            <div class="card">
+                <p>Automatic work log saving to GitHub when sessions end.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Setting</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Repository</td>
+                            <td><a href="https://github.com/skasuga-ctrl/work-logs" target="_blank">skasuga-ctrl/work-logs</a></td>
+                        </tr>
+                        <tr>
+                            <td>File path</td>
+                            <td><code>YYYY/MM/YYYY-MM-DD_topic-slug.md</code></td>
+                        </tr>
+                        <tr>
+                            <td>Trigger</td>
+                            <td><code>/clear</code>, <code>&#12463;&#12522;&#12450;</code>, <code>&#32066;&#12431;&#12426;</code>, <code>&#12362;&#12431;&#12426;</code>, <code>&#12525;&#12464;&#20445;&#23384;</code></td>
+                        </tr>
+                        <tr>
+                            <td>State tracking</td>
+                            <td><code>~/.claude/last-session-end.json</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="command">&#12525;&#12464;&#20445;&#23384; &nbsp;&nbsp;# Triggers auto-save of the current session log</div>
+
+            <h3>Planned Workflows</h3>
+            <div class="grid">
+                <div class="card">
+                    <span class="card-icon">&#9881;&#65039;</span>
+                    <h4>GitHub Actions CI/CD</h4>
+                    <p>Automated testing and deployment pipelines</p>
+                    <span class="status-badge status-planned">Planned</span>
+                </div>
+                <div class="card">
+                    <span class="card-icon">&#9729;&#65039;</span>
+                    <h4>GCP Automation</h4>
+                    <p>Cloud function scripts and scheduling</p>
+                    <span class="status-badge status-planned">Planned</span>
+                </div>
+                <div class="card">
+                    <span class="card-icon">&#128221;</span>
+                    <h4>Obsidian + Claude</h4>
+                    <p>Note-based guide creation and publishing pipeline</p>
+                    <span class="status-badge status-planned">Planned</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 6. Troubleshooting ===== -->
+        <section id="troubleshooting" data-tags="ai dev auto">
+            <h2><span class="emoji">&#128295;</span>Troubleshooting <span class="status-badge status-wip">WIP</span></h2>
+            <p>Common errors and their solutions.</p>
+
+            <h3>MCP Connection Issues</h3>
+            <div class="card">
+                <h4>Error: MCP server not responding</h4>
+                <div class="command">claude mcp list &nbsp;&nbsp;# Check server status</div>
+                <p><strong>Solution:</strong> Restart the MCP server process. Check <code>~/.claude.json</code> for correct configuration paths.</p>
+            </div>
 
             <div class="card">
-                <h4>Coming Soon</h4>
-                <p>Workflow documentation will be added here.</p>
+                <h4>Error: Gemini API rate limit (429)</h4>
+                <pre><code>[429 Too Many Requests] You exceeded your current quota</code></pre>
+                <p><strong>Solution:</strong> Wait 30 seconds or switch to <code>gemini_quick</code> (Flash) instead of <code>gemini_review</code> (Pro). Check quota at <a href="https://ai.dev/rate-limit" target="_blank">ai.dev/rate-limit</a>.</p>
+            </div>
+
+            <h3>Claude Code Tips</h3>
+            <div class="card">
+                <h4>Context window running low</h4>
+                <div class="danger">
+                    <p>When context reaches ~80%, Claude may start losing earlier conversation details.</p>
+                </div>
+                <p><strong>Actions:</strong></p>
                 <ul>
-                    <li>Claude Code work log automation</li>
-                    <li>GitHub Actions CI/CD pipelines</li>
-                    <li>GCP automation scripts</li>
-                    <li>Obsidian + Claude integration</li>
+                    <li>Use <code>/compact</code> to compress context manually</li>
+                    <li>Disable unused MCP servers in project settings</li>
+                    <li>Delegate large file analysis to <code>gemini_quick</code></li>
                 </ul>
+            </div>
+
+            <div class="info">
+                <strong>&#128161;</strong> More troubleshooting entries will be added as issues are encountered and resolved.
             </div>
         </section>
 
-        <!-- ===== References ===== -->
-        <section id="references">
+        <!-- ===== 7. References ===== -->
+        <section id="references" data-tags="all">
             <h2><span class="emoji">&#128218;</span>References</h2>
             <div class="grid">
                 <div class="card">
-                    <h4>&#128279; Tools &amp; Services</h4>
+                    <span class="card-icon">&#128279;</span>
+                    <h4>AI Tools &amp; Services</h4>
                     <ul>
                         <li><a href="https://claude.ai" target="_blank">Claude AI</a></li>
                         <li><a href="https://github.com/anthropics/claude-code" target="_blank">Claude Code</a></li>
-                        <li><a href="https://obsidian.md" target="_blank">Obsidian</a></li>
-                        <li><a href="https://github.com/skasuga-ctrl" target="_blank">GitHub (@skasuga-ctrl)</a></li>
+                        <li><a href="https://platform.openai.com" target="_blank">OpenAI Platform</a></li>
+                        <li><a href="https://ai.google.dev" target="_blank">Google AI (Gemini)</a></li>
                     </ul>
                 </div>
                 <div class="card">
-                    <h4>&#128196; Related Repos</h4>
+                    <span class="card-icon">&#128736;&#65039;</span>
+                    <h4>Dev Tools</h4>
                     <ul>
+                        <li><a href="https://obsidian.md" target="_blank">Obsidian</a></li>
+                        <li><a href="https://cli.github.com" target="_blank">GitHub CLI</a></li>
+                        <li><a href="https://playwright.dev" target="_blank">Playwright</a></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <span class="card-icon">&#128100;</span>
+                    <h4>My Repos</h4>
+                    <ul>
+                        <li><a href="https://github.com/skasuga-ctrl" target="_blank">GitHub Profile</a></li>
                         <li><a href="https://github.com/skasuga-ctrl/work-logs" target="_blank">Work Logs</a></li>
-                        <li><a href="https://github.com/skasuga-ctrl/guides" target="_blank">This Knowledge Base (source)</a></li>
+                        <li><a href="https://github.com/skasuga-ctrl/guides" target="_blank">This Knowledge Base</a></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <span class="card-icon">&#128214;</span>
+                    <h4>Useful Guides</h4>
+                    <ul>
+                        <li><a href="https://naokijodan.github.io/everything-claude-code-guide/" target="_blank">Everything Claude Code Guide</a></li>
+                        <li><a href="https://modelcontextprotocol.io" target="_blank">MCP Documentation</a></li>
                     </ul>
                 </div>
             </div>
@@ -578,7 +1062,7 @@
     <button class="back-to-top" onclick="scrollToTop()">&#8593;</button>
 
     <script>
-        // Theme toggle
+        // ===== Theme Toggle =====
         function toggleTheme() {
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
@@ -586,40 +1070,98 @@
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
         }
-
-        // Load saved theme
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
 
-        // Smooth scroll
+        // ===== Smooth Scroll =====
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
 
-        // Back to top button
+        // ===== Back to Top =====
         const backToTop = document.querySelector('.back-to-top');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
-            }
+            backToTop.classList.toggle('visible', window.scrollY > 300);
         });
 
         function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===== Active Nav Highlight =====
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                if (scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
             });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // ===== Search =====
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const allSections = document.querySelectorAll('section[id]');
+            const noResults = document.getElementById('noResults');
+            let found = 0;
+
+            if (!query) {
+                allSections.forEach(s => s.classList.remove('hidden'));
+                noResults.style.display = 'none';
+                return;
+            }
+
+            allSections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    section.classList.remove('hidden');
+                    found++;
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+
+            noResults.style.display = found === 0 ? 'block' : 'none';
+        }
+
+        // ===== Tag Filter =====
+        let activeTag = 'all';
+
+        function filterByTag(tag) {
+            activeTag = tag;
+            const allSections = document.querySelectorAll('section[id]');
+            const allTags = document.querySelectorAll('.tag-filter-container .tag');
+
+            allTags.forEach(t => t.classList.remove('active'));
+            document.querySelector(`.tag-${tag}`).classList.add('active');
+
+            allSections.forEach(section => {
+                const sectionTags = (section.getAttribute('data-tags') || '').split(' ');
+                if (tag === 'all' || sectionTags.includes(tag) || sectionTags.includes('all')) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+
+            document.getElementById('noResults').style.display = 'none';
+            document.getElementById('searchInput').value = '';
         }
     </script>
 </body>
