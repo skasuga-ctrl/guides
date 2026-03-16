@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>フリマアシスト 使い方ガイド - KASUGA's Guides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #ffffff; --bg-secondary: #f7f7f7; --bg-code: #2d2d2d;
+            --text-primary: #1a1a1a; --text-secondary: #666666; --text-code: #e6e6e6;
+            --accent: #4a90d9; --accent-secondary: #6c5ce7;
+            --border: #e0e0e0; --shadow: rgba(0,0,0,0.1); --link: #0066cc;
+        }
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a; --bg-secondary: #2d2d2d; --bg-code: #1e1e1e;
+            --text-primary: #e6e6e6; --text-secondary: #a0a0a0; --text-code: #d4d4d4;
+            --border: #404040; --shadow: rgba(255,255,255,0.05); --link: #4dabf7;
+        }
+        body {
+            font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.8; color: var(--text-primary); background: var(--bg-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .theme-toggle {
+            position: fixed; top: 20px; right: 20px;
+            background: var(--bg-secondary); border: 2px solid var(--border);
+            border-radius: 50px; padding: 10px 20px; cursor: pointer;
+            font-size: 1.2em; z-index: 1000; transition: all 0.3s ease;
+        }
+        .theme-toggle:hover { transform: scale(1.1); }
+        header {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            color: white; padding: 50px 20px; text-align: center;
+            margin-bottom: 40px; border-radius: 0 0 20px 20px;
+        }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header .subtitle { font-size: 1.1em; opacity: 0.9; }
+        .breadcrumb {
+            max-width: 800px; margin: -20px auto 30px; padding: 0 20px;
+            font-size: 0.9em; color: var(--text-secondary);
+        }
+        .breadcrumb a { color: var(--link); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px 60px; }
+        h2 {
+            font-size: 1.8em; margin: 40px 0 20px; color: var(--accent);
+            border-bottom: 3px solid var(--accent); padding-bottom: 10px;
+        }
+        h3 { font-size: 1.3em; margin: 25px 0 15px; color: var(--text-primary); }
+        p { margin-bottom: 15px; }
+        ul, ol { margin: 15px 0 15px 25px; }
+        li { margin-bottom: 10px; }
+        .card {
+            background: var(--bg-secondary); padding: 25px; border-radius: 12px;
+            margin: 20px 0; box-shadow: 0 4px 15px var(--shadow);
+        }
+        .step-list { counter-reset: step; list-style: none; margin-left: 0; }
+        .step-list li {
+            counter-increment: step; padding: 15px 15px 15px 60px;
+            position: relative; background: var(--bg-secondary);
+            border-radius: 10px; margin-bottom: 12px;
+        }
+        .step-list li::before {
+            content: counter(step); position: absolute; left: 15px; top: 50%;
+            transform: translateY(-50%); background: var(--accent); color: white;
+            width: 32px; height: 32px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-weight: 700;
+        }
+        .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+        .tag {
+            display: inline-block; padding: 4px 12px; border-radius: 12px;
+            font-size: 0.8em; font-weight: 600; background: #fff3e0; color: #e65100;
+        }
+        [data-theme="dark"] .tag { background: #2f2013; color: #ffb74d; }
+        .info {
+            background: #d1ecf1; border-left: 5px solid #17a2b8;
+            padding: 20px; margin: 20px 0; border-radius: 8px; color: #0c5460;
+        }
+        [data-theme="dark"] .info { background: #1a3238; color: #17a2b8; }
+        .warning {
+            background: #fff3cd; border-left: 5px solid #ffc107;
+            padding: 20px; margin: 20px 0; border-radius: 8px; color: #856404;
+        }
+        [data-theme="dark"] .warning { background: #3d3419; color: #ffc107; }
+        .danger {
+            background: #f8d7da; border-left: 5px solid #dc3545;
+            padding: 20px; margin: 20px 0; border-radius: 8px; color: #721c24;
+        }
+        [data-theme="dark"] .danger { background: #2f1a1e; color: #dc3545; }
+        .success {
+            background: #d4edda; border-left: 5px solid #28a745;
+            padding: 20px; margin: 20px 0; border-radius: 8px; color: #155724;
+        }
+        [data-theme="dark"] .success { background: #1a2f1e; color: #28a745; }
+        code {
+            background: var(--bg-code); color: var(--text-code);
+            padding: 2px 6px; border-radius: 4px; font-size: 0.9em;
+        }
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px; margin: 20px 0;
+        }
+        .feature-card {
+            background: var(--bg-secondary); padding: 20px; border-radius: 12px;
+            box-shadow: 0 2px 10px var(--shadow); transition: all 0.3s ease;
+        }
+        .feature-card:hover { transform: translateY(-3px); }
+        .feature-card .icon { font-size: 1.8em; margin-bottom: 8px; display: block; }
+        .feature-card h4 { margin: 0 0 8px; color: var(--accent); }
+        .feature-card p { font-size: 0.9em; color: var(--text-secondary); margin: 0; }
+        footer {
+            text-align: center; padding: 40px 20px; margin-top: 40px;
+            border-top: 2px solid var(--border); color: var(--text-secondary);
+        }
+        footer a { color: var(--link); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
+    <header>
+        <h1>&#9889; フリマアシスト</h1>
+        <p class="subtitle">フリマアプリWeb版に便利機能を追加するChrome拡張機能</p>
+    </header>
+    <div class="breadcrumb"><a href="../index.html">Knowledge Base</a> &gt; <a href="index.html">Tool Guides</a> &gt; フリマアシスト</div>
+    <div class="container">
+
+        <h2>&#127760; 対応サイト</h2>
+        <div class="tag-row">
+            <span class="tag">メルカリ</span>
+            <span class="tag">メルカリShops</span>
+            <span class="tag">ラクマ</span>
+            <span class="tag">PayPayフリマ</span>
+            <span class="tag">ヤフオク</span>
+            <span class="tag">BASE</span>
+            <span class="tag">STORES</span>
+            <span class="tag">minne</span>
+            <span class="tag">Creema</span>
+        </div>
+
+        <h2>&#128187; インストール</h2>
+        <ol class="step-list">
+            <li>Chrome Web Store で「フリマアシスト」を検索<br><code>ID: jcbljdgnpcckiamdgmnfhijgkkaogmgg</code></li>
+            <li>「Chromeに追加」ボタンをクリック</li>
+            <li>拡張機能がインストールされる</li>
+        </ol>
+        <div class="info">
+            <strong>&#128161; 備考:</strong> Chrome専用。Firefox / Edge等では使用不可。Googleアカウントでログインしておくと複数端末で設定共有可能。
+        </div>
+
+        <h2>&#128272; シークレットコード設定（必須）</h2>
+        <p>コピー出品・画像ダウンロード・CSV出力などの機能を使うにはシークレットコードが必要です。</p>
+        <ol class="step-list">
+            <li>きよまろ氏の<strong>公式LINE</strong>を友だち追加</li>
+            <li>LINEで「<strong>フリマアシスト</strong>」とそのまま7文字だけ送信</li>
+            <li>自動返信でシークレットコードが届く</li>
+            <li>Chrome右上のフリマアシストアイコンをクリック</li>
+            <li>コード入力欄に入力して【入力】ボタン→「OK」表示で完了</li>
+        </ol>
+        <div class="warning">
+            <strong>&#9888;&#65039; 注意:</strong>
+            <ul style="margin-top:8px;">
+                <li>送信メッセージに余計な文字・記号・スペースが入っていると取得不可</li>
+                <li>シークレットコードは<strong>定期的に変更</strong>される（LINEで通知あり）</li>
+                <li>公式LINE登録後すぐブロック / 何度もブロックするとコード取得不可</li>
+            </ul>
+        </div>
+
+        <h2>&#128275; 裏コード（自動マルチボタン）</h2>
+        <div class="card">
+            <p>自動値下げ・値上げ・出品停止・再出品などの自動処理機能を使うには裏コードが必要。</p>
+            <ol>
+                <li>公式LINEで「<strong>裏コード</strong>」と送信</li>
+                <li>届いたコードをオプション画面に入力</li>
+                <li>自動値下げ金額などはオプション画面でカスタマイズ</li>
+            </ol>
+        </div>
+
+        <h2>&#9889; 主な機能</h2>
+        <div class="grid">
+            <div class="feature-card">
+                <span class="icon">&#128260;</span>
+                <h4>コピー出品</h4>
+                <p>商品ページをまるごとコピー。別フリマサイトへのクロス出品も対応</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">&#128197;</span>
+                <h4>日時表示</h4>
+                <p>出品日時・更新日時・コメント投稿日時を商品ページに表示</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">&#128247;</span>
+                <h4>画像ダウンロード</h4>
+                <p>商品画像を単品または一括でダウンロード</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">&#128269;</span>
+                <h4>検索拡張</h4>
+                <p>検索結果に他フリマサイトのワンクリック検索ボタンを追加</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">&#128172;</span>
+                <h4>定型文機能</h4>
+                <p>よく使うコメントを最大5つ登録、ワンクリック挿入</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">&#128178;</span>
+                <h4>価格変更ボタン</h4>
+                <p>編集画面で「-100」「-1000」「-5%」等で即座に価格調整</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">&#129302;</span>
+                <h4>自動マルチボタン</h4>
+                <p>自動値下げ/値上げ・出品停止・削除・再出品を自動処理</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">&#128202;</span>
+                <h4>CSV出力</h4>
+                <p>売却済み商品情報をCSVエクスポート。確定申告に活用</p>
+            </div>
+        </div>
+
+        <h2>&#9881;&#65039; カスタマイズ</h2>
+        <div class="card">
+            <p>Chrome右上のフリマアシストアイコンをクリックすると設定画面が開きます。</p>
+            <ul>
+                <li>普段使わないサイトのボタンを<strong>非表示</strong>にできる</li>
+                <li>自動値下げ金額のカスタマイズ（オプション画面）</li>
+            </ul>
+        </div>
+
+        <h2>&#9888;&#65039; 注意事項</h2>
+        <div class="danger">
+            <strong>重要:</strong>
+            <ul style="margin-top:8px;">
+                <li><strong>短時間に大量操作</strong>するとBot判定されアカウント停止のリスクあり（10ページ程度なら問題なし）</li>
+                <li><strong>売却済みページを削除</strong>するとCSVデータ取得不可</li>
+                <li>本機能利用による損害について開発者は責任を負わない</li>
+            </ul>
+        </div>
+
+        <div class="info">
+            <strong>&#128241; スマホで使う:</strong> スマホアプリ版はないが、Androidの Yandex Browser / Quetta / Edge Canary で利用可能。
+        </div>
+
+        <div class="success">
+            <strong>&#128176; 無料:</strong> LINE登録のみで全機能無料。開発者: きよまろ氏。
+        </div>
+    </div>
+    <footer>
+        <p><a href="index.html">&larr; Tool Guides に戻る</a></p>
+        <p style="font-size:0.85em;margin-top:10px;">Last updated: March 2026</p>
+    </footer>
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const t = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', t); localStorage.setItem('theme', t);
+        }
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+    </script>
+</body>
+</html>

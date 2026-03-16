@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>とりこみ君 使い方ガイド - KASUGA's Guides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #ffffff; --bg-secondary: #f7f7f7; --bg-code: #2d2d2d;
+            --text-primary: #1a1a1a; --text-secondary: #666666; --text-code: #e6e6e6;
+            --accent: #4a90d9; --accent-secondary: #6c5ce7;
+            --border: #e0e0e0; --shadow: rgba(0,0,0,0.1); --link: #0066cc;
+        }
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a; --bg-secondary: #2d2d2d; --bg-code: #1e1e1e;
+            --text-primary: #e6e6e6; --text-secondary: #a0a0a0; --text-code: #d4d4d4;
+            --border: #404040; --shadow: rgba(255,255,255,0.05); --link: #4dabf7;
+        }
+        body {
+            font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.8; color: var(--text-primary); background: var(--bg-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .theme-toggle {
+            position: fixed; top: 20px; right: 20px;
+            background: var(--bg-secondary); border: 2px solid var(--border);
+            border-radius: 50px; padding: 10px 20px; cursor: pointer;
+            font-size: 1.2em; z-index: 1000; transition: all 0.3s ease;
+        }
+        .theme-toggle:hover { transform: scale(1.1); }
+        header {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white; padding: 50px 20px; text-align: center;
+            margin-bottom: 40px; border-radius: 0 0 20px 20px;
+        }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header .subtitle { font-size: 1.1em; opacity: 0.9; }
+        .breadcrumb {
+            max-width: 800px; margin: -20px auto 30px; padding: 0 20px;
+            font-size: 0.9em; color: var(--text-secondary);
+        }
+        .breadcrumb a { color: var(--link); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px 60px; }
+        h2 {
+            font-size: 1.8em; margin: 40px 0 20px; color: var(--accent);
+            border-bottom: 3px solid var(--accent); padding-bottom: 10px;
+        }
+        h3 { font-size: 1.3em; margin: 25px 0 15px; color: var(--text-primary); }
+        p { margin-bottom: 15px; }
+        ul, ol { margin: 15px 0 15px 25px; }
+        li { margin-bottom: 10px; }
+        .card {
+            background: var(--bg-secondary); padding: 25px; border-radius: 12px;
+            margin: 20px 0; box-shadow: 0 4px 15px var(--shadow);
+        }
+        .step-list { counter-reset: step; list-style: none; margin-left: 0; }
+        .step-list li {
+            counter-increment: step; padding: 15px 15px 15px 60px;
+            position: relative; background: var(--bg-secondary);
+            border-radius: 10px; margin-bottom: 12px;
+        }
+        .step-list li::before {
+            content: counter(step); position: absolute; left: 15px; top: 50%;
+            transform: translateY(-50%); background: var(--accent); color: white;
+            width: 32px; height: 32px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-weight: 700;
+        }
+        .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+        .tag {
+            display: inline-block; padding: 4px 12px; border-radius: 12px;
+            font-size: 0.8em; font-weight: 600; background: #e3f2fd; color: #1565c0;
+        }
+        [data-theme="dark"] .tag { background: #1a2940; color: #64b5f6; }
+        .info {
+            background: #d1ecf1; border-left: 5px solid #17a2b8;
+            padding: 20px; margin: 20px 0; border-radius: 8px; color: #0c5460;
+        }
+        [data-theme="dark"] .info { background: #1a3238; color: #17a2b8; }
+        .success {
+            background: #d4edda; border-left: 5px solid #28a745;
+            padding: 20px; margin: 20px 0; border-radius: 8px; color: #155724;
+        }
+        [data-theme="dark"] .success { background: #1a2f1e; color: #28a745; }
+        table {
+            width: 100%; border-collapse: collapse; margin: 20px 0;
+            background: var(--bg-secondary); border-radius: 12px;
+            overflow: hidden; box-shadow: 0 4px 15px var(--shadow);
+        }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--accent); color: white; font-weight: 600; }
+        tr:hover { background: var(--bg-primary); }
+        code {
+            background: var(--bg-code); color: var(--text-code);
+            padding: 2px 6px; border-radius: 4px; font-size: 0.9em;
+        }
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px; margin: 20px 0;
+        }
+        .feature-card {
+            background: var(--bg-secondary); padding: 20px; border-radius: 12px;
+            box-shadow: 0 2px 10px var(--shadow); transition: all 0.3s ease;
+        }
+        .feature-card:hover { transform: translateY(-3px); }
+        .feature-card .icon { font-size: 1.8em; margin-bottom: 8px; display: block; }
+        .feature-card h4 { margin: 0 0 8px; color: var(--accent); }
+        .feature-card p { font-size: 0.9em; color: var(--text-secondary); margin: 0; }
+        footer {
+            text-align: center; padding: 40px 20px; margin-top: 40px;
+            border-top: 2px solid var(--border); color: var(--text-secondary);
+        }
+        footer a { color: var(--link); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
+    <header>
+        <h1>&#128230; とりこみ君</h1>
+        <p class="subtitle">商品情報を自動取得してスプレッドシートに転送</p>
+    </header>
+    <div class="breadcrumb"><a href="../index.html">Knowledge Base</a> &gt; <a href="index.html">Tool Guides</a> &gt; とりこみ君</div>
+    <div class="container">
+
+        <h2>&#127760; 対応サイト</h2>
+        <div class="tag-row">
+            <span class="tag">eBay</span>
+            <span class="tag">楽天市場</span>
+            <span class="tag">Amazon</span>
+            <span class="tag">メルカリ</span>
+            <span class="tag">ヤフオク</span>
+            <span class="tag">PayPayフリマ</span>
+            <span class="tag">ラクマ</span>
+        </div>
+
+        <h2>&#9889; 主な機能</h2>
+        <div class="grid">
+            <div class="feature-card">
+                <span class="icon">&#128073;</span>
+                <h4>ワンクリック抽出</h4>
+                <p>商品名・価格・画像URL・出品者情報を自動取得</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">&#128209;</span>
+                <h4>複数シート対応</h4>
+                <p>最大10個のシートを登録、用途別に使い分け</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">&#128680;</span>
+                <h4>アラート機能</h4>
+                <p>除外キーワード・注目ハイライト・自動警告</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">&#9881;&#65039;</span>
+                <h4>カスタマイズ</h4>
+                <p>ボタン配置・取得画像数・待機時間を調整</p>
+            </div>
+        </div>
+
+        <h2>&#128221; 使い方（5ステップ）</h2>
+        <ol class="step-list">
+            <li>Chrome Web Store からインストール<br><code>ID: pibfligoaakdjohpiapdgnldpkoicepb</code></li>
+            <li>設定画面で Google スプレッドシートのURLを登録</li>
+            <li>対応サイトの商品ページを開く</li>
+            <li>「とりこみ」ボタンをクリック</li>
+            <li>商品情報が自動的にスプレッドシートに追加される</li>
+        </ol>
+
+        <div class="success">
+            <strong>&#128161; Tips:</strong> 複数商品の連続取り込みは、ページを切り替えながらボタンをクリックするだけでOK。
+        </div>
+
+        <h2>&#128279; 一括シートとの連携</h2>
+        <div class="card">
+            <p>取得した商品情報を一括シートにインポート可能。</p>
+            <ol>
+                <li>リサーチ用スプレッドシートで情報収集</li>
+                <li>一括シートにコピー</li>
+                <li>価格計算・翻訳を実行</li>
+            </ol>
+        </div>
+
+        <h2>&#128197; アップデート履歴</h2>
+        <table>
+            <thead><tr><th>バージョン</th><th>日付</th><th>内容</th></tr></thead>
+            <tbody>
+                <tr><td>v1.2.7</td><td>2026/02/04</td><td>メルカリ評価取得をポーリング方式に変更、フリマアシスト要素の検出精度向上</td></tr>
+                <tr><td>v1.2.6</td><td>2026/02/02</td><td>評価取得失敗時の自動リトライ、未取得アラート、誤検出修正</td></tr>
+                <tr><td>v1.2.5</td><td>-</td><td>フリマサイト評価件数未取得時の警告表示、発送日数8日以上のアラート</td></tr>
+                <tr><td>v1.2.4</td><td>-</td><td>メルカリ評価取得の誤検出修正、公式DOM要素の優先取得ロジック改善</td></tr>
+            </tbody>
+        </table>
+
+        <div class="info">
+            <strong>&#128279; リソース:</strong> GitHubでソースコードが公開されています: naokijodan/universal-scraper
+        </div>
+    </div>
+    <footer>
+        <p><a href="index.html">&larr; Tool Guides に戻る</a></p>
+        <p style="font-size:0.85em;margin-top:10px;">Last updated: March 2026</p>
+    </footer>
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const t = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', t); localStorage.setItem('theme', t);
+        }
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+    </script>
+</body>
+</html>
